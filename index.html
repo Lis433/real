@@ -1,50 +1,37 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="utf-8">
-  <title>Kakao 공유 테스트</title>
-  <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
-  <script>
-    // ✅ 0. URL 파라미터 확인 후 자동 리다이렉트
-    const params = new URLSearchParams(window.location.search);
-    const redirectUrl = params.get('url');
-    if (redirectUrl) {
-      // 카카오 공유를 실행하지 않고 바로 이동해야 하는 경우
-      if (!window.location.href.includes('kakaoShare')) {
-        window.location.href = redirectUrl;
-      }
-    }
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+<script>
+window.onload = function () {
 
-    // ✅ 1. Kakao SDK 초기화
+  if (!Kakao.isInitialized()) {
     Kakao.init('ef614b6cbb9b50dd34d1e00045355a11');
+  }
 
-    // ✅ 2. 공유 함수 정의
-    function sendLink() {
-      Kakao.Link.sendDefault({
-        objectType: 'feed',
-        content: {
-          title: '뚜레쥬르',
-          description: '스트로베리 케이크',
-          imageUrl: 'https://lrl.kr/bCEko',
+  // 공유 함수
+  window.sendLink = function () {
+    const v = Date.now();
+
+    Kakao.Link.sendDefault({
+      objectType: 'feed',
+      content: {
+        title: '뚜레쥬르',
+        description: '스트로베리 케이크',
+        imageUrl: 'https://lrl.kr/bCEko',
+        link: {
+          mobileWebUrl: `https://lis433.github.io/real/?v=${v}&url=https://open.kakao.com/o/sEZjJA6g`,
+          webUrl: `https://lis433.github.io/real/?v=${v}&url=https://open.kakao.com/o/sEZjJA6g`,
+        },
+      },
+      buttons: [
+        {
+          title: '선물 받기',
           link: {
-            mobileWebUrl: 'https://lis433.github.io/real/?v=123456789&url=https://open.kakao.com/o/sEZjJA6g',
-            webUrl: 'https://lis433.github.io/real/?v=123456789&url=https://open.kakao.com/o/sEZjJA6g',
+            mobileWebUrl: `https://lis433.github.io/real/?v=${v}&url=https://open.kakao.com/o/sEZjJA6g`,
+            webUrl: `https://lis433.github.io/real/?v=${v}&url=https://open.kakao.com/o/sEZjJA6g`,
           },
         },
-        buttons: [
-          {
-            title: '선물 받기',
-            link: {
-              mobileWebUrl: 'https://lis433.github.io/real/?v=123456789&url=https://open.kakao.com/o/sEZjJA6g',
-              webUrl: 'https://lis433.github.io/real/?v=123456789&url=https://open.kakao.com/o/sEZjJA6g',
-            },
-          },
-        ],
-      });
-    }
-  </script>
-</head>
-<body>
-  <button onclick="sendLink()">카카오톡으로 공유</button>
-</body>
-</html>
+      ],
+    });
+  };
+
+};
+</script>
