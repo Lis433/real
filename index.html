@@ -4,22 +4,32 @@
   <meta charset="utf-8">
   <title>Kakao 공유 테스트</title>
   <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+
   <script>
-    // ✅ 0. URL 파라미터 확인 후 자동 리다이렉트
+    // ✅ 0. 리다이렉트 (허용된 것만)
     const params = new URLSearchParams(window.location.search);
     const redirectUrl = params.get('url');
+
     if (redirectUrl) {
-      // 카카오 공유를 실행하지 않고 바로 이동해야 하는 경우
-      if (!window.location.href.includes('kakaoShare')) {
+      if (
+        redirectUrl.startsWith("https://open.kakao.com") ||
+        redirectUrl.startsWith("https://www.youtube.com")
+      ) {
         window.location.href = redirectUrl;
       }
     }
 
-    // ✅ 1. Kakao SDK 초기화
-    Kakao.init('ba4848b56b49c8826ad4113e55670941');
+    // ✅ 1. SDK 초기화
+    window.onload = function () {
+      if (!Kakao.isInitialized()) {
+        Kakao.init('ba4848b56b49c8826ad4113e55670941');
+      }
+    };
 
-    // ✅ 2. 공유 함수 정의
+    // ✅ 2. 공유 함수
     function sendLink() {
+      const v = Date.now();
+
       Kakao.Link.sendDefault({
         objectType: 'feed',
         content: {
@@ -27,16 +37,16 @@
           description: '스트로베리 케이크',
           imageUrl: 'https://lrl.kr/bCEko',
           link: {
-            mobileWebUrl: 'https://lis433.github.io/real/?v=123&url=https://open.kakao.com/o/sEZjJA6g',
-            webUrl: 'https://lis433.github.io/real/?v=123&url=https://open.kakao.com/o/sEZjJA6g',
+            mobileWebUrl: `https://lis433.github.io/real/?v=${v}&url=https://open.kakao.com/o/sEZjJA6g`,
+            webUrl: `https://lis433.github.io/real/?v=${v}&url=https://open.kakao.com/o/sEZjJA6g`,
           },
         },
         buttons: [
           {
             title: '선물 받기',
             link: {
-              mobileWebUrl: 'https://lis433.github.io/real/?v=123&url=https://open.kakao.com/o/sEZjJA6g',
-              webUrl: 'https://lis433.github.io/real/?v=123&url=https://open.kakao.com/o/sEZjJA6g',
+              mobileWebUrl: `https://pack15.github.io/real/?v=${v}&url=https://open.kakao.com/o/sEZjJA6g`,
+              webUrl: `https://pack15.github.io/real/?v=${v}&url=https://open.kakao.com/o/sEZjJA6g`,
             },
           },
         ],
@@ -44,7 +54,8 @@
     }
   </script>
 </head>
+
 <body>
   <button onclick="sendLink()">카카오톡으로 공유</button>
 </body>
-</html></script>
+</html>
